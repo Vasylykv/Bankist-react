@@ -1,6 +1,14 @@
+import { useState } from 'react';
+
+
 import logo from '../../assets/logo.png';
 
-const NavigationPanel = () => {
+const Header = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState();
+
+  
+
   return (
     <nav>
       <p class="welcome">Log in to get started</p>
@@ -10,6 +18,8 @@ const NavigationPanel = () => {
           type="text"
           placeholder="user"
           class="login__input login__input--user"
+          onChange={setUsername}
+          value={username}
         />
 
         <input
@@ -17,6 +27,8 @@ const NavigationPanel = () => {
           placeholder="PIN"
           maxlength="4"
           class="login__input login__input--pin"
+          onChange={setPassword}
+          value={password}
         />
         <button class="login__btn">&rarr;</button>
       </form>
@@ -24,4 +36,4 @@ const NavigationPanel = () => {
   );
 };
 
-export default NavigationPanel;
+export default Header;
