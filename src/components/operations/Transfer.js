@@ -19,10 +19,9 @@ const Transfer = () => {
 
   const handleTransfer = (formValue) => {
     const { email, amount } = formValue;
-    // console.log(JSON.stringify(formValue, null, 2));
+    console.log(JSON.stringify(formValue, null, 2));
     dispatch(makeTransfer({ email, amount }));
   };
-
   return (
     <Formik
       initialValues={initialValues}

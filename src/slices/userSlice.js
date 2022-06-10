@@ -21,14 +21,16 @@ export const fetchUser = createAsyncThunk(
 
 export const makeTransfer = createAsyncThunk(
   'user/makeTransfer',
-  async ({ email, amout }, thunkAPI) => {
+  async ({ email, amount }, thunkAPI) => {
+    // console.log(email);
+    // console.log(amount);
+    // console.log(thunkAPI.getState().user.user.id);
     const { request } = useHttp();
     return await request(
-      `http://localhost:5000/makeTransfer`,
+      `http://localhost:5000/api/transfer/${email}`,
       'PATCH',
       JSON.stringify({
-        email,
-        amout,
+        amount,
         senderId: thunkAPI.getState().user.user.id,
       })
     );
@@ -61,7 +63,9 @@ const userSlice = createSlice({
         state.userLoadingStatus = 'error';
       })
       .addCase(makeTransfer.pending, (state) => {})
-      .addCase(makeTransfer.fulfilled, (state) => {})
+      .addCase(makeTransfer.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+      })
       .addCase(makeTransfer.rejected, (state) => {})
       .addDefaultCase(() => {});
   },
