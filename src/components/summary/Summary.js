@@ -1,8 +1,9 @@
 import { useSelector } from 'react-redux';
 import { formatCur } from '../../services/Format/formatCurrency';
 
-const Summary = () => {
+const Summary = ({ handleToggleSort }) => {
   const downArrow = String.fromCodePoint(8595);
+
   const movements = useSelector((state) => state.user.user.movements);
   const locale = useSelector((state) => state.user.user.locale);
   const currency = useSelector((state) => state.user.user.currency);
@@ -46,7 +47,9 @@ const Summary = () => {
       <p className="summary__value summary__value--interest">
         {calcInterest()}
       </p>
-      <button className="btn--sort">{downArrow} SORT</button>
+      <button onClick={handleToggleSort} className="btn--sort">
+        {downArrow} SORT
+      </button>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import Balance from '../balance/Balance';
 import Movements from '../movements/Movements';
@@ -7,10 +8,13 @@ import Operations from '../operations/Operations';
 import Timer from '../timer/Timer';
 import { logout } from '../../slices/userSlice';
 
-const MainPage = () => {
+const UserPage = () => {
+  const [sortMovements, setSortMovements] = useState(false);
+
+  const { isLoggedIn } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const { user: currentUser } = useSelector((state) => state.user);
-  if (!currentUser) {
+
+  if (!isLoggedIn) {
     return <Redirect to="/" />;
   }
 
@@ -18,11 +22,15 @@ const MainPage = () => {
     dispatch(logout());
   };
 
+  const handleToggleSort = () => {
+    setSortMovements(!sortMovements);
+  };
+
   return (
     <main className="app">
       <Balance />
-      <Movements />
-      <Summary />
+      <Movements sortMovements={sortMovements} />
+      <Summary handleToggleSort={handleToggleSort} />
       <Operations />
       <Timer />
       <button onClick={handleLogOut}>Log out</button>
@@ -30,4 +38,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default UserPage;

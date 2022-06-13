@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { useHttp } from '../hooks/http.hook';
 
+const BASE_URL = 'http://localhost:5000';
+
 const initialState = {
   isLoggedIn: false,
   user: null,
@@ -12,7 +14,7 @@ export const fetchUser = createAsyncThunk(
   async ({ email, password }, thunkAPI) => {
     const { request } = useHttp();
     return await request(
-      `http://localhost:5000/api/auth/login`,
+      `${BASE_URL}/api/auth/login`,
       'POST',
       JSON.stringify({ email, password })
     );
@@ -22,17 +24,27 @@ export const fetchUser = createAsyncThunk(
 export const makeTransfer = createAsyncThunk(
   'user/makeTransfer',
   async ({ email, amount }, thunkAPI) => {
-    // console.log(email);
-    // console.log(amount);
-    // console.log(thunkAPI.getState().user.user.id);
     const { request } = useHttp();
     return await request(
-      `http://localhost:5000/api/transfer/${email}`,
+      `${BASE_URL}/api/transfer/${email}`,
       'PATCH',
       JSON.stringify({
         amount,
         senderId: thunkAPI.getState().user.user.id,
       })
+    );
+  }
+);
+
+export const closeAccount = createAsyncThunk(
+  'user/closeAccount',
+  async ({ email, password }, thunkAPI) => {
+    const { request } = useHttp();
+    const userId = thunkAPI.getState().user.user.id;
+    return await request(
+      `${BASE_URL}/users/${userId}`,
+      'DELETE',
+      JSON.stringify({ email, password })
     );
   }
 );
@@ -67,6 +79,12 @@ const userSlice = createSlice({
         state.user = action.payload.user;
       })
       .addCase(makeTransfer.rejected, (state) => {})
+      .addCase(closeAccount.pending, (state) => {})
+      .addCase(closeAccount.fulfilled, (state, action) => {
+        state.isLoggedIn = false;
+        state.user = null;
+      })
+      .addCase(closeAccount.rejected)
       .addDefaultCase(() => {});
   },
 });

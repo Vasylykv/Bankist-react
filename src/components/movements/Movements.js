@@ -1,14 +1,13 @@
 import { useSelector } from 'react-redux';
 import { useState } from 'react';
 import { formatCur } from '../../services/Format/formatCurrency';
+import { selectUser } from '../../slices/userSlice';
 
-const Movements = () => {
+const Movements = ({ sortMovements }) => {
   const movements = useSelector((state) => state.user.user.movements);
-  const movementsDates = useSelector((state) => state.user.user.movementsDates);
   const locale = useSelector((state) => state.user.user.locale);
   const currency = useSelector((state) => state.user.user.currency);
-
-  const [sort, setSort] = useState(false);
+  const movementsDates = useSelector((state) => state.user.user.movementsDates);
 
   const formatMovementDate = function (date, locale) {
     const calcDaysPassed = (data1, date2) =>
@@ -23,7 +22,7 @@ const Movements = () => {
     return new Intl.DateTimeFormat(locale).format(date);
   };
 
-  const renderMovements = function () {
+  const renderMovements = function (sort) {
     const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
 
     return movs.map(function (mov, i) {
@@ -48,7 +47,7 @@ const Movements = () => {
     });
   };
 
-  return <div className="movements">{renderMovements()}</div>;
+  return <div className="movements">{renderMovements(sortMovements)}</div>;
 };
 
 export default Movements;

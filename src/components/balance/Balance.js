@@ -1,7 +1,5 @@
-import { createSelector } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-
+import { selectUser } from '../../slices/userSlice';
 import { formatCur } from '../../services/Format/formatCurrency';
 
 const Balance = () => {

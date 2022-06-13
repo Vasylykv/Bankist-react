@@ -35,11 +35,13 @@ const Transfer = () => {
             type="email"
             name="email"
             className="form__input form__input--to"
+            required
           />
           <Field
             type="number"
             className="form__input form__input--amount"
             name="amount"
+            required
           />
           <button type="submit" className="form__btn form__btn--transfer">
             &rarr;
